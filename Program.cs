@@ -75,7 +75,11 @@ class Program
 
     private async Task SlashCommandSetup()
     {
-        var guild = client.GetGuild(662256722370625549); //hardcoded to my server for now
+        var config = new ConfigurationBuilder().AddUserSecrets<Program>().Build();
+        var secretProvider = config.Providers.First();
+        secretProvider.TryGet("Guild", out var guildID);
+
+        var guild = client.GetGuild(ulong.Parse(guildID)); //Hardcoded to one server for now
         var RandomMessage = new SlashCommandBuilder();
 
         //await guild.DeleteApplicationCommandsAsync();
@@ -104,7 +108,6 @@ class Program
         var config = new ConfigurationBuilder().AddUserSecrets<Program>().Build();
         var secretProvider = config.Providers.First();
         secretProvider.TryGet("Token", out var token);
-        Console.WriteLine($"Starting up with Token {token}");
 
         await this.client.LoginAsync(TokenType.Bot, token);
         await this.client.StartAsync();
