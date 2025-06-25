@@ -28,6 +28,11 @@ jobs:
       run: dotnet test --no-build --verbosity normal
     - name: Publish
       run: dotnet publish -c Release -r linux-x64 --self-contained
+    - name: Echo Filename
+      run: echo $BuildText \($AssemblyName\)
+      env:
+        BuildText: FileName = ${{ steps.Build.outputs.filename }}
+        AssemblyName: AssemblyName = ${{ steps.Build.outputs.assemblyname }}
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v4.6.2
       with:
